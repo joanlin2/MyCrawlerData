@@ -13,7 +13,9 @@ public class HighwayStaticInfo {
 	public static void main(String[] args) {
 		
 		// 遠端資料路徑
-		String uri = "gz:http://tisvcloud.freeway.gov.tw/cms_value.xml.gz";
+		//String uri = "gz:http://tisvcloud.freeway.gov.tw/cms_value.xml.gz";//高公局即時路況資料
+		//String uri = "gz:http://tisvcloud.freeway.gov.tw/avi_value.xml.gz";  //AVI 動態資訊
+		String uri = "gz:http://tisvcloud.freeway.gov.tw/cctv_info.xml.gz";  //CCTV 靜態資訊
 
 		System.out.println(
 				CrawlerPack.start()
