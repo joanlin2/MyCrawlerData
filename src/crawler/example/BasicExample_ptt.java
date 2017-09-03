@@ -30,7 +30,6 @@ public class BasicExample_ptt {
 		elem.select("div").remove();
 		System.out.println(
 				elem.text()
-
 		);
 
 //		System.out.println(
