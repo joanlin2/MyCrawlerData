@@ -34,7 +34,9 @@ public class StockDailyOTC {
 		String[] YYYYMMDD ={};
 
 
+
 		for( Element elem: jsoupDoc.select("aadata")){
+
 			YYYYMMDD = elem.child(0).html().replace(",","").split("/") ;
 //			System.out.println((Integer.valueOf(YYYYMMDD[0])+1911)+YYYYMMDD[1]+YYYYMMDD[2]);
 
