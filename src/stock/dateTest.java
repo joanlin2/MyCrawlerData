@@ -21,8 +21,6 @@ public class dateTest {
         for(int i =0; i < days; i++){
             startDate.add(GregorianCalendar.DATE, 1); //日期遞增
 
-            String pnum = String.format("%02d",9);
-            System.out.println(pnum);
             System.out.println(startDate.get(Calendar.YEAR) + "/"+ (startDate.get(Calendar.MONTH )+1)+ "/"+startDate.get(Calendar.DATE));
 //            System.out.println(endDate.get(Calendar.MONTH )+1);
 //            System.out.println(endDate.get(Calendar.DATE));
