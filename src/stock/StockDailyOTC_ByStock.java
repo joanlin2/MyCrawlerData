@@ -18,25 +18,19 @@ import java.util.GregorianCalendar;
  * 2017/09/05
  *
  */
-public class StockDailyOTC {
+public class StockDailyOTC_ByStock {
 
     public static void main(String[] args) {
-        String YYYY ="";
-        String MM ="";
-        String DD ="";
-        String sockId ="";
-        String lastType = ""; //上市/上櫃
+        String YYYY ="", MM ="" , sockId ="", uri = "", strYYYYMM="";
         String taskID = "dlytrans";
-        String lastSockId ="";
         String[] arrLine = null;  //股票清單陣列
         String strLine ="";   //單行股票info
         String data;
-        String lastYYYYMM = "", strYYYYMM="";
-        String uri = "";
-        String csvString = "";
+        String csvString = "" , csvTitle ="";
         FileWriter fw1 = null;
-        csvString = "股票代號,日期,成交千股,成交千元,開盤,最高,最低,收盤,漲跌,筆數";
+        csvTitle = "股票代號,日期,成交千股,成交千元,開盤,最高,最低,收盤,漲跌,筆數";
         String[] YYYYMMDD = null;
+        Integer cnt =0;
 
         //起迄日期設定
         Calendar initDate = new GregorianCalendar(2017, Calendar.AUGUST, 1);
@@ -54,43 +48,41 @@ public class StockDailyOTC {
                 strLine = new String(data.getBytes( "Big5"),"Big5"); //讀跟顯示時的編碼
                 arrLine = strLine.split(",");
                 sockId = arrLine[0] ;  //股票代號
-
-
-                //arrLine[2] 上市/上櫃 lastType
                 System.out.println("---------------------------");
                 System.out.println("sockId="+ sockId);
-
                 //重設初始日期
                 startDate = new GregorianCalendar(initDate.get(Calendar.YEAR), initDate.get(Calendar.MONTH), 1);
 
+//                System.out.println("initDate="+initDate.get(Calendar.YEAR)+"-"+ (initDate.get(Calendar.MONTH)+1));
                 for(int k =0; k <= mons; k++) { //月份遞減
-                    startDate.add(GregorianCalendar.MONTH, 1); //月份遞減
+                    startDate.add(GregorianCalendar.MONTH, k); //月份遞增
                     YYYY = String.format("%04d",startDate.get(Calendar.YEAR));
-                    MM = String.format("%02d",(startDate.get(Calendar.MONTH) ) );
+                    MM = String.format("%02d",(startDate.get(Calendar.MONTH)+1 ) );
                     strYYYYMM = YYYY + MM ;//reset
                     System.out.println("strYYYYMM="+strYYYYMM);
 
                     //個股日成交資訊
-                    if (arrLine[2].equals("上市") ){
-                        System.out.println("上市");
-                    }else{
-                        System.out.println("上櫃");
-
+                    if (arrLine[2].equals("上櫃") ){
                         uri = "http://www.tpex.org.tw/web/stock/aftertrading/daily_trading_info/st43_result.php?l=zh-tw&d="
                                 + (Integer.valueOf(YYYY) - 1911 )+"/"+ MM +"&stkno="+sockId;
 
-                        System.out.println(uri);
+//                        System.out.println(uri);
                         Document jsoupDoc = CrawlerPack.start()
                                 .setRemoteEncoding("big5")
                                 .getFromJson(uri);
-
-                        YYYYMMDD = null;
+                        csvString = csvTitle;
+                        cnt = jsoupDoc.select("aadata").size();
                         for (Element elem : jsoupDoc.select("aadata")) {
-                            fw1 = new FileWriter("D:\\workspace\\output\\OTC-"+ taskID + "-" + sockId + "-"+ strYYYYMM + ".csv");
-                            fw1.write (csvString+"\r\n");  //標題
-
+                            File file = new File("D:\\workspace\\output\\OTC-"+ taskID + "-" + sockId + "-"+ strYYYYMM + ".csv");
+                            if (file.exists()) {
+                                file.delete();
+                            }
+                            fw1 = new FileWriter(file,true);
+//                            fw1 = new FileWriter("D:\\workspace\\output\\OTC-"+ taskID + "-" + sockId + "-"+ strYYYYMM + ".csv",true);
+                            if(file.length()==0){
+                                fw1.write (csvString+"\r\n");  //標題
+                            }
                             YYYYMMDD = elem.child(0).html().replace(",", "").split("/");
-
                             csvString = sockId
                                     + "," + (Integer.valueOf(YYYYMMDD[0]) + 1911) + YYYYMMDD[1] + YYYYMMDD[2]
                                     + "," + elem.child(1).html().replace(",", "")
@@ -100,31 +92,24 @@ public class StockDailyOTC {
                                     + "," + elem.child(5).html().replace(",", "")
                                     + "," + elem.child(6).html().replace(",", "")
                                     + "," + elem.child(7).html().replace(",", "")
+                                    + "," + elem.child(8).html().replace(",", "")
                             ;
                             fw1.write (csvString+"\r\n");
-                          System.out.println(csvString);
+                            fw1.flush();
+//                          System.out.println(csvString);
                         }
-//                        strdate = arrLine[0] ; //放入股票代號
+                        System.out.println("done:" + cnt);
                     }
+                    if(fw1 != null){
+                        fw1.close();
 
-
+                    }
                 }//月份迴圈
-                if(fw1 != null){
-                    fw1.close();
-
-                }
-//                lastType = arrLine[2] ; //放入歷史資料
             }//股票迴圈
-
             br1.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
-
     }
 
     public static int getMonthNum(Calendar initDate){
