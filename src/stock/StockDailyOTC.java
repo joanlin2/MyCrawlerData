@@ -60,17 +60,15 @@ public class StockDailyOTC {
                 System.out.println("---------------------------");
                 System.out.println("sockId="+ sockId);
 
-                startDate = null;
-                startDate = initDate ;
-                System.out.println("initDate="+initDate.get(Calendar.YEAR)+ "-"+initDate.get(Calendar.MONTH));
+                //重設初始日期
+                startDate = new GregorianCalendar(initDate.get(Calendar.YEAR), initDate.get(Calendar.MONTH), 1);
+
                 for(int k =0; k <= mons; k++) { //月份遞減
-                    startDate.add(GregorianCalendar.MONTH, -1); //月份遞減
+                    startDate.add(GregorianCalendar.MONTH, 1); //月份遞減
                     YYYY = String.format("%04d",startDate.get(Calendar.YEAR));
-                    MM = String.format("%02d",(startDate.get(Calendar.MONTH) + 1) );
+                    MM = String.format("%02d",(startDate.get(Calendar.MONTH) ) );
                     strYYYYMM = YYYY + MM ;//reset
                     System.out.println("strYYYYMM="+strYYYYMM);
-
-
 
                     //個股日成交資訊
                     if (arrLine[2].equals("上市") ){
@@ -86,15 +84,12 @@ public class StockDailyOTC {
                                 .setRemoteEncoding("big5")
                                 .getFromJson(uri);
 
-
                         YYYYMMDD = null;
-
                         for (Element elem : jsoupDoc.select("aadata")) {
                             fw1 = new FileWriter("D:\\workspace\\output\\OTC-"+ taskID + "-" + sockId + "-"+ strYYYYMM + ".csv");
                             fw1.write (csvString+"\r\n");  //標題
 
                             YYYYMMDD = elem.child(0).html().replace(",", "").split("/");
-//			System.out.println((Integer.valueOf(YYYYMMDD[0])+1911)+YYYYMMDD[1]+YYYYMMDD[2]);
 
                             csvString = sockId
                                     + "," + (Integer.valueOf(YYYYMMDD[0]) + 1911) + YYYYMMDD[1] + YYYYMMDD[2]
@@ -112,7 +107,6 @@ public class StockDailyOTC {
 //                        strdate = arrLine[0] ; //放入股票代號
                     }
 
-//                    lastYYYYMM = arrLine[0] ; //放入YYYYMM
 
                 }//月份迴圈
                 if(fw1 != null){
