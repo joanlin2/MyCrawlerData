@@ -22,8 +22,10 @@ import java.util.GregorianCalendar;
 public class StockDailyOTC_ByDate {
 
     public static void main(String[] args) {
-        String YYYY ="", MM ="" , sockId ="", uri = "", strYYYYMM="";
+        String YYYY ="", MM ="", DD ="" , sockId ="", uri = "", strYYYYMM="";
         String taskID = "dlytrans";
+        String fileType = "OTC";
+        String stockFileSource = "stocklist.csv";
         String[] arrLine = null;  //股票清單陣列
         String strLine ="";   //單行股票info
         String data;
@@ -51,7 +53,7 @@ public class StockDailyOTC_ByDate {
             //原始檔案編碼
             BufferedReader br1 = new BufferedReader(
                     new InputStreamReader(
-                            new FileInputStream(PATH + "stocklist.csv"), "Big5"));
+                            new FileInputStream(PATH + stockFileSource ), "Big5"));
 
                 for(int k =0; k <= mons; k++) { //月份遞減
                     //重設初始日期(為了利用k,每次新日期都要先讀初始日期)
@@ -67,7 +69,7 @@ public class StockDailyOTC_ByDate {
                     //重讀股票檔
                     br1 = new BufferedReader(
                             new InputStreamReader(
-                                    new FileInputStream(PATH + "stocklist.csv"), "Big5"));
+                                    new FileInputStream(PATH + stockFileSource), "Big5"));
 //                    System.out.println("br1.length="+ br1.);
                     while ((data = br1.readLine()) != null) {//股票迴圈
                         strLine = new String(data.getBytes( "Big5"),"Big5"); //讀跟顯示時的編碼
@@ -92,7 +94,7 @@ public class StockDailyOTC_ByDate {
                                 csvString = csvTitle;
                             }
                             for (Element elem : jsoupDoc.select("aadata")) {
-                                File file = new File(OUTPATH + "OTC-"+ taskID +"-"+ strYYYYMM + ".csv");
+                                File file = new File(OUTPATH + fileType + "-" + taskID +"-"+ strYYYYMM + ".csv");
                                 if (file.exists()) {
                                     file.delete();  //重新執行時要殺舊檔
                                 }

@@ -26,7 +26,7 @@ public class StockDailyLST_ByDate {
         String YYYY ="", MM ="", DD =""  , sockId ="", uri = "", strYYYYMM="";
         String taskID = "dlytrans";
         String fileType = "LST";
-        String stockFileSource = "stocklistLST.csv";
+        String stockFileSource = "stocklist.csv";
         String[] arrLine = null;  //股票清單陣列
         String strLine ="";   //單行股票info
         String data;
