@@ -40,7 +40,7 @@ public class StockDailyOTC_ByDate {
         }
 
         //起迄日期設定
-        Calendar initDate = new GregorianCalendar(2014, Calendar.JANUARY, 1);
+        Calendar initDate = new GregorianCalendar(2016, Calendar.JANUARY, 1);
         Calendar startDate = null;
         Calendar endDate = null;  //不指定結束日期就由getMonthNum()抓系統日
 //        Calendar endDate = new GregorianCalendar(2017, Calendar.FEBRUARY, 1); //指定結束日期
@@ -68,13 +68,14 @@ public class StockDailyOTC_ByDate {
                     br1 = new BufferedReader(
                             new InputStreamReader(
                                     new FileInputStream(PATH + "stocklist.csv"), "Big5"));
+//                    System.out.println("br1.length="+ br1.);
                     while ((data = br1.readLine()) != null) {//股票迴圈
                         strLine = new String(data.getBytes( "Big5"),"Big5"); //讀跟顯示時的編碼
                         arrLine = strLine.split(",");
                         sockId = arrLine[0] ;  //股票代號
 //                        System.out.println("---------------------------");
 //                        System.out.println("sockId="+ sockId);
-
+                        stockCnt ++ ; //股票計次
                         //個股日成交資訊
                         if (arrLine[2].equals("上櫃") ){
                             uri = "http://www.tpex.org.tw/web/stock/aftertrading/daily_trading_info/st43_result.php?l=zh-tw&d="
@@ -87,7 +88,8 @@ public class StockDailyOTC_ByDate {
                             csvString = csvTitle;
                             cnt = jsoupDoc.select("aadata").size();
                             if (cnt>0){
-                                stockCnt ++ ; //股票計次
+//                                stockCnt ++ ; //股票計次
+                                csvString = csvTitle;
                             }
                             for (Element elem : jsoupDoc.select("aadata")) {
                                 File file = new File(OUTPATH + "OTC-"+ taskID +"-"+ strYYYYMM + ".csv");
