@@ -42,8 +42,8 @@ public class StockDailyOTC_ByDate {
         //起迄日期設定
         Calendar initDate = new GregorianCalendar(2016, Calendar.JANUARY, 1);
         Calendar startDate = null;
-        Calendar endDate = null;  //不指定結束日期就由getMonthNum()抓系統日
-//        Calendar endDate = new GregorianCalendar(2017, Calendar.FEBRUARY, 1); //指定結束日期
+//        Calendar endDate = null;  //不指定結束日期就由getMonthNum()抓系統日
+        Calendar endDate = new GregorianCalendar(2016, Calendar.DECEMBER, 1); //指定結束日期
         int mons = getMonthNum(initDate,endDate); //total month
         System.out.println("total mons ="+ mons);
 
@@ -51,7 +51,7 @@ public class StockDailyOTC_ByDate {
             //原始檔案編碼
             BufferedReader br1 = new BufferedReader(
                     new InputStreamReader(
-                            new FileInputStream(OUTPATH + "stocklist.csv"), "Big5"));
+                            new FileInputStream(PATH + "stocklist.csv"), "Big5"));
 
                 for(int k =0; k <= mons; k++) { //月份遞減
                     //重設初始日期(為了利用k,每次新日期都要先讀初始日期)
