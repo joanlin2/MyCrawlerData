@@ -27,5 +27,10 @@ public class dateTest {
 
 
         }
+        java.util.Date da = new java.util.Date();
+        long longToday = da.getTime();
+        java.sql.Date ds2 = new java.sql.Date(longToday);
+        System.out.println("longToday=" + longToday);
+        System.out.println("ds2=" + ds2);
     }
 }
