@@ -45,7 +45,7 @@ public class dateTest {
         Calendar ca = new GregorianCalendar(2016, 9,16,17,56,03);
         int ts = (int) ca.getTimeInMillis() / (1000 );
 
-        System.out.println("ctime=" + ctime);
+//        System.out.println("ctime=" + ctime);
 
 
 
